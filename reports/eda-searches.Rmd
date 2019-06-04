@@ -19,8 +19,18 @@ buscas = read_csv(here::here("data/search_data.csv"))
 ```
 
 ```{r}
-buscas %>% 
-    ggplot(aes(x = results)) + 
-    geom_histogram(binwidth = 5) 
+theta_click_rate = function(d, i){
+    buscas = d %>% 
+        slice(i) %>% 
+        group_by(group) %>% 
+        summarise(clickthrough = mean(num_clicks)) 
+    
+    group_a = buscas %>% filter(group == "a") %>% pull(num_clicks)
+    group_b = buscas %>% filter(turma == "b") %>% pull(num_clicks)
+    
+    group_a - group_b
+}
+theta_click = theta_click_rate(buscas, 1:NROW(buscas))
+theta_click
 ```
 
